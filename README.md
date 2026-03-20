@@ -1,16 +1,27 @@
-# React + Vite
+## 🚀 Deployment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is configured for automatic deployment to **GitHub Pages** using GitHub Actions.
 
-Currently, two official plugins are available:
+### Setting up GitHub Pages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Go to your GitHub Repository **Settings** > **Pages**.
+2. Under **Build and deployment** > **Branch**, ensure it is NOT set to "GitHub Actions" (unless you prefer that, but our workflow uses the `gh-pages` branch).
+3. The provided Action will automatically create and update the `gh-pages` branch.
 
-## React Compiler
+### Environment Variables & Secrets
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The application requires API keys for Gemini or OpenAI. Since the backend proxy (`server/server.js`) cannot run on GitHub Pages, you have two options:
 
-## Expanding the ESLint configuration
+#### Option A: Use a Remote Backend (Recommended)
+1. Deploy the `server/` folder to a service like **Render**, **Fly.io**, or **Vercel**.
+2. In your hosting service, set the environment variables found in `server/.env.example`:
+   - `GEMINI_API_KEY`
+   - `OPENAI_API_KEY`
+3. In your GitHub Repository **Settings** > **Secrets and variables** > **Actions**, add a new secret:
+   - `VITE_API_URL`: The URL of your deployed backend (e.g., `https://your-backend.render.com`).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+#### Option B: Client-side Keys (Manual)
+Users can enter their own API keys directly in the application UI. These keys are stored in `localStorage` and used for direct API calls, bypassing the need for a backend.
+
+### Automatic Deployment
+Every push to the `main` branch will trigger the GitHub Action defined in `.github/workflows/deploy.yml`, which builds the frontend and deploys it to GitHub Pages.

@@ -54,7 +54,10 @@ async function callLLM(prompt) {
     }
 
     // 3. Fallback to Proxy
-    const res = await fetch('/api/llm', {
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    const endpoint = `${apiUrl}/api/llm`;
+    
+    const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
@@ -69,7 +72,9 @@ async function callLLM(prompt) {
 
 const isProxyAvailable = async () => {
     try {
-        const res = await fetch('/api/llm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: '' }) });
+        const apiUrl = import.meta.env.VITE_API_URL || '';
+        const endpoint = `${apiUrl}/api/llm`;
+        const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: '' }) });
         return res.status !== 502 && res.status !== 503 && res.status !== 0;
     } catch {
         return false;
