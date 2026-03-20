@@ -1,0 +1,179 @@
+.details-header {
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.style-icon-large {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
+}
+
+.details-header .step-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.analysis-summary.mini {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+
+.list-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+    padding-left: 1rem;
+    border-left: 4px solid var(--accent-warm);
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 3rem;
+}
+
+.detail-item-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem 1.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    gap: 0.8rem;
+}
+
+.detail-item-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.detail-item-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(244, 114, 182, 0.2);
+    border-color: rgba(244, 114, 182, 0.5);
+}
+
+.detail-item-card:hover::after {
+    opacity: 1;
+}
+
+.item-content {
+    flex: 1;
+    z-index: 1;
+}
+
+.item-name {
+    font-size: 1.3rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.item-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 0.8rem;
+}
+
+.platform-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.platform-tag.youtube {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    border: 1px solid rgba(255, 0, 0, 0.4);
+}
+
+.platform-tag.twitch {
+    background: rgba(145, 70, 255, 0.2);
+    color: #c093ff;
+    border: 1px solid rgba(145, 70, 255, 0.4);
+}
+
+.platform-tag.onlyfans,
+.platform-tag.adult {
+    background: rgba(0, 175, 240, 0.2);
+    color: #00aff0;
+    border: 1px solid rgba(0, 175, 240, 0.4);
+}
+
+.platform-tag.pornhub {
+    background: rgba(255, 153, 0, 0.2);
+    color: #ffa31a;
+    border: 1px solid rgba(255, 153, 0, 0.4);
+}
+
+.action-arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.detail-item-card:hover .action-arrow {
+    color: var(--accent-warm);
+    transform: translate(3px, -3px);
+}
+
+.action-group {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    z-index: 2;
+    position: relative;
+}
+
+.action-group .copy-btn,
+.action-group .link-btn {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.75rem;
+    white-space: nowrap;
+    text-decoration: none;
+    text-align: center;
+    flex: 1;
+}
+
+/* R-Class: ID-only compact row */
+.detail-item-card--rclass {
+    flex-direction: row;
+    align-items: center;
+    padding: 0.7rem 1.2rem;
+    gap: 1rem;
+}
+
+.detail-item-card--rclass::after {
+    display: none;
+}
+
+.item-name--id {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    color: var(--color-primary, #38bdf8);
+    margin-bottom: 0;
+}

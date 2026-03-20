@@ -1,0 +1,8 @@
+/* Overrides or specific app layout adjustments */
+.relative-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Ensure smooth cross-fades by positioning steps absolutely if needed, 
+   though React simple state swapping triggers the enter animations we set. */

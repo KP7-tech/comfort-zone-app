@@ -1,0 +1,48 @@
+{
+    "app": {
+        "title": "Beyond Bounds",
+        "subtitle": "Step outside your comfort zone, explore the unknown"
+    },
+    "sidebar": {
+        "title": "Deviation Index",
+        "description": "Set how much you want to break out of your comfort zone. The higher the index, the more different the recommendations will be from your current preferences.",
+        "labels": {
+            "0": "Rooted (Extremely Conservative)",
+            "20": "Tweak (Conservative)",
+            "40": "Roam (Slight Variation)",
+            "60": "Explore (Moderate)",
+            "80": "Breakthrough (Bold)",
+            "100": "Subvert (Extreme)"
+        }
+    },
+    "input": {
+        "title": "Your Recent Comfort Zone",
+        "desc": "Please provide at least 3 same type of things you frequently interact with recently, and we will analyze your style preferences.<br />e.g. food you eat, music you listen to, movies you watch, YouTube or Twitch channels you follow. The more, the merrier!",
+        "placeholder": "Enter an item name and press Enter...",
+        "addButton": "Add",
+        "empty": "No items added yet",
+        "ready": "✓ Ready for analysis",
+        "needMore": "Need {count} more items",
+        "startAnalyze": "Start Exploration",
+        "voiceInput": "Voice Input",
+        "imageUpload": "Image Recognition"
+    },
+    "analyzing": {
+        "title": "Exploring Unknown Boundaries...",
+        "status": "Algorithm is deconstructing your comfort zone"
+    },
+    "styles": {
+        "title": "Recommended Unknown Territories",
+        "desc": "Based on your usual preference for '{category}', and a deviation index of {index}%, we've selected these styles for you:",
+        "noRecs": "No recommended styles found",
+        "back": "Reselect Preferences"
+    },
+    "details": {
+        "title": "Specific Exploration Targets",
+        "desc": "Here are specific subjects or targets you can try in the '{style}' style:",
+        "copy": "Copy",
+        "copied": "Copied",
+        "backToStyles": "Back to Styles",
+        "reset": "Back to Home to Restart"
+    }
+}
