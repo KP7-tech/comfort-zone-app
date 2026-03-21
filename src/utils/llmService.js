@@ -109,7 +109,7 @@ export async function analyzeInputItemsAsync(items) {
             // Proxy not running — fall back to mock
             return new Promise(resolve => setTimeout(() => resolve(mockAnalyze(items)), 800));
         }
-        return { error: "AI 分析失敗，請確認 proxy server 是否已啟動（npm run server）。" };
+        return { error: "AI 分析失敗，請確認是否已在平台（如 Vercel）設定 API 金鑰。" };
     }
 }
 
