@@ -23,7 +23,7 @@ Error generating stack: `+e.message+`
                 "category": "配對到的大類名稱，需與上述五項完全一致",
                 "subcategory": "具體的風格名稱，如: 獨立搖滾、科幻驚悚片、巨乳系女優AV"
             }
-        `);return JSON.parse(t)}catch(t){return console.error(`LLM Error:`,t),t.message.includes(`Failed to fetch`)?new Promise(t=>setTimeout(()=>t(ne(e)),800)):{error:`AI 分析失敗，請確認 proxy server 是否已啟動（npm run server）。`}}}var ce=`
+        `);return JSON.parse(t)}catch(t){return console.error(`LLM Error:`,t),t.message.includes(`Failed to fetch`)?new Promise(t=>setTimeout(()=>t(ne(e)),800)):{error:`AI 分析失敗，請確認是否已在平台（如 Vercel）設定 API 金鑰。`}}}var ce=`
 [Semantic Isolation — Adult Content Mode]
 This category is "Adult Content" (成人影音). You MUST:
 - Treat this as STRICTLY SEPARATE from mainstream cinema.
