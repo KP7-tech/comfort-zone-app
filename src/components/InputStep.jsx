@@ -5,7 +5,9 @@ import './InputStep.css';
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 export default function InputStep({ items, setItems, onNext }) {
-    const { t, locale } = useTranslation();
+    const i18n = useTranslation();
+    const t = i18n?.t || ((k) => k);
+    const locale = i18n?.locale || 'zh-TW';
     const [currentInput, setCurrentInput] = useState('');
     const [isListening, setIsListening] = useState(false);
     const [isUploading, setIsUploading] = useState(false);

@@ -2,13 +2,15 @@ import { useTranslation } from '../contexts/I18nContext';
 import './Sidebar.css';
 
 export default function Sidebar({ deviationIndex, setDeviationIndex }) {
-    const { t } = useTranslation();
+    const i18n = useTranslation();
+    const t = i18n?.t || ((k) => k);
 
     const getIndexLabel = (val) => {
-        if (val <= 20) return `0-20%: ${t('sidebar.labels.20')}`;
-        if (val <= 40) return `21-40%: ${t('sidebar.labels.40')}`;
-        if (val <= 60) return `41-60%: ${t('sidebar.labels.60')}`;
-        if (val <= 80) return `61-80%: ${t('sidebar.labels.80')}`;
+        const safeVal = Number(val) || 0;
+        if (safeVal <= 20) return `0-20%: ${t('sidebar.labels.20')}`;
+        if (safeVal <= 40) return `21-40%: ${t('sidebar.labels.40')}`;
+        if (safeVal <= 60) return `41-60%: ${t('sidebar.labels.60')}`;
+        if (safeVal <= 80) return `61-80%: ${t('sidebar.labels.80')}`;
         return `81-100%: ${t('sidebar.labels.100')}`;
     };
 

@@ -3,7 +3,8 @@ import { useTranslation } from '../contexts/I18nContext';
 import './DetailsStep.css';
 
 export default function DetailsStep({ category, style, deviationIndex, specificItems, onBack }) {
-    const { t } = useTranslation();
+    const i18n = useTranslation();
+    const t = i18n?.t || ((k) => k);
     const [copiedIndex, setCopiedIndex] = useState(null);
 
     const handleCopy = (e, text, idx) => {

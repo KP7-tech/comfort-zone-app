@@ -3,7 +3,8 @@ import { useTranslation } from '../contexts/I18nContext';
 import './AnalyzingStep.css';
 
 export default function AnalyzingStep({ isDataReady, onFinish }) {
-    const { t } = useTranslation();
+    const i18n = useTranslation();
+    const t = i18n?.t || ((k) => k);
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
