@@ -1,65 +1,88 @@
 import { analyzeInputItems as mockAnalyze, getRecommendedStyles as mockStyles, getSpecificItemsForStyle as mockItems } from './mockAlgorithm';
 
-// All LLM calls go through the local proxy server (/api/llm → Express → LLM API).
-// API keys are stored in server/.env and are never sent to the browser.
+const GEMINI_MODELS = [
+    'gemini-2.0-flash',
+    'gemini-2.5-flash',
+    'gemini-3.0-flash',
+    'gemini-1.5-flash',
+    'gemini-1.5-flash-8b'
+];
+
+const OPENAI_MODELS = [
+    'gpt-4o-mini',
+    'gpt-4o',
+    'gpt-3.5-turbo'
+];
+
+// All LLM calls go through the local proxy server if direct calls fail.
 async function callLLM(prompt) {
     const geminiKey = localStorage.getItem('gemini_api_key');
     const openaiKey = localStorage.getItem('openai_api_key');
 
-    // 1. Try Gemini (Direct)
+    // 1. Try Gemini Tiers (Direct)
     if (geminiKey) {
-        try {
-            const res = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { responseMimeType: 'application/json' },
-                    }),
+        for (const model of GEMINI_MODELS) {
+            try {
+                const res = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            generationConfig: { responseMimeType: 'application/json' },
+                        }),
+                    }
+                );
+                if (res.ok) {
+                    const data = await res.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+                } else if (res.status === 429 || res.status === 401 || res.status === 404) {
+                    console.warn(`Gemini ${model} failed (Status ${res.status}), trying next fallback...`);
+                    continue; // Try next model or next provider
+                } else {
+                    const errData = await res.json().catch(() => ({}));
+                    const msg = errData.error?.message || `Status ${res.status}`;
+                    throw new Error(`Gemini Error: ${msg}`);
                 }
-            );
-            if (res.ok) {
-                const data = await res.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-            } else {
-                const errData = await res.json().catch(() => ({}));
-                const msg = errData.error?.message || `Status ${res.status}`;
-                throw new Error(`Gemini Error: ${msg}`);
+            } catch (e) {
+                if (e.message.includes('Gemini Error')) throw e;
+                console.warn(`Direct Gemini ${model} network failed, trying fallback...`, e);
             }
-        } catch (e) {
-            if (e.message.includes('Gemini Error')) throw e;
-            console.warn("Direct Gemini network failed, falling back...", e);
         }
     }
 
-    // 2. Try OpenAI (Direct)
+    // 2. Try OpenAI Tiers (Direct)
     if (openaiKey) {
-        try {
-            const res = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${openaiKey}`,
-                },
-                body: JSON.stringify({
-                    model: 'gpt-4o-mini',
-                    messages: [{ role: 'user', content: prompt }],
-                    response_format: { type: 'json_object' },
-                }),
-            });
-            if (res.ok) {
-                const data = await res.json();
-                return data.choices?.[0]?.message?.content ?? '';
-            } else {
-                const errData = await res.json().catch(() => ({}));
-                const msg = errData.error?.message || `Status ${res.status}`;
-                throw new Error(`OpenAI Error: ${msg}`);
+        for (const model of OPENAI_MODELS) {
+            try {
+                const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${openaiKey}`,
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [{ role: 'user', content: prompt }],
+                        response_format: { type: 'json_object' },
+                    }),
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    return data.choices?.[0]?.message?.content ?? '';
+                } else if (res.status === 429 || res.status === 401) {
+                    console.warn(`OpenAI ${model} failed (Status ${res.status}), trying next fallback...`);
+                    continue;
+                } else {
+                    const errData = await res.json().catch(() => ({}));
+                    const msg = errData.error?.message || `Status ${res.status}`;
+                    throw new Error(`OpenAI Error: ${msg}`);
+                }
+            } catch (e) {
+                if (e.message.includes('OpenAI Error')) throw e;
+                console.warn(`Direct OpenAI ${model} network failed, trying fallback...`, e);
             }
-        } catch (e) {
-            if (e.message.includes('OpenAI Error')) throw e;
-            console.warn("Direct OpenAI network failed, falling back...", e);
         }
     }
 
