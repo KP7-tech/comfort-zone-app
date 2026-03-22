@@ -78,7 +78,7 @@ function App() {
       />
 
       <main className="main-content">
-        <header className="app-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <header className="app-header">
           <div>
             <h1 className="app-title text-gradient">{t('app.title')}</h1>
             <p className="app-subtitle">{t('app.subtitle')}</p>

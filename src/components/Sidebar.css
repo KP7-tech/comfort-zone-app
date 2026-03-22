@@ -8,6 +8,9 @@
     position: sticky;
     top: 1rem;
     height: calc(100vh - 2rem);
+    transition: all 0.3s ease;
+    overflow-x: hidden;
+    min-width: 260px;
 }
 
 .sidebar-header {
@@ -29,6 +32,8 @@
     font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .slider-container {
@@ -46,9 +51,13 @@
 }
 
 .slider-label {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-muted);
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Vertical Slider Magic */
