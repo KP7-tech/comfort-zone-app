@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import InputStep from './components/InputStep';
 import AnalyzingStep from './components/AnalyzingStep';
