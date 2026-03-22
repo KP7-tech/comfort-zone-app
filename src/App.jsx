@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Sidebar from './components/Sidebar';
 import InputStep from './components/InputStep';
 import AnalyzingStep from './components/AnalyzingStep';
@@ -131,6 +132,7 @@ function App() {
           )}
         </div>
       </main>
+      <Analytics />
     </div>
   );
 }
