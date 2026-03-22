@@ -129,3 +129,33 @@
     box-shadow: none;
     border-color: transparent;
 }
+
+@media (max-width: 768px) {
+    .input-card {
+        padding: 1.5rem;
+    }
+
+    .step-title {
+        font-size: 1.5rem;
+    }
+
+    .input-form {
+        flex-direction: column;
+    }
+
+    .icon-btn {
+        padding: 0.75rem;
+    }
+
+    .analyze-btn {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .action-row {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+        text-align: center;
+    }
+}

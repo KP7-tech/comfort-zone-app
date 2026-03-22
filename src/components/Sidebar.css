@@ -105,9 +105,65 @@
     justify-content: space-between;
     height: 300px;
     position: absolute;
-    right: 50px;
+    right: 30px;
     top: 150px;
     pointer-events: none;
     color: var(--text-muted);
     font-size: 0.8rem;
+}
+
+/* RWD for Sidebar */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 100% !important;
+        min-width: auto;
+        height: auto;
+        position: relative;
+        top: 0;
+        margin: 1rem 0;
+        padding: 1.5rem;
+    }
+
+    .slider-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1rem 0;
+        align-items: center;
+    }
+
+    .slider-value {
+        font-size: 2.5rem;
+        margin-bottom: 0;
+    }
+
+    .slider-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        width: auto;
+        max-width: 250px;
+    }
+
+    .vertical-slider {
+        transform: rotate(0);
+        width: 100%;
+        max-width: 400px;
+        margin: 1rem auto;
+    }
+
+    .slider-markers {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .slider-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .slider-label {
+        max-width: 100%;
+    }
 }

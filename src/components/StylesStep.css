@@ -139,3 +139,19 @@
     border-color: var(--color-primary, #38bdf8) !important;
     box-shadow: 0 0 20px rgba(56, 189, 248, 0.4) !important;
 }
+
+@media (max-width: 768px) {
+    .styles-header {
+        padding: 1rem;
+    }
+
+    .analysis-summary {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .styles-grid {
+        grid-template-columns: 1fr;
+    }
+}
