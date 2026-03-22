@@ -26,8 +26,10 @@ function App() {
   const [specificItems, setSpecificItems] = useState([]);
 
   const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+  const [isDataReady, setIsDataReady] = useState(false);
 
   const handleStartAnalysis = async () => {
+    setIsDataReady(false);
     // Show analyzing step immediately
     setStep('analyzing'); 
 
@@ -45,12 +47,32 @@ function App() {
         
         const styles = await getRecommendedStylesAsync(analysisResult.category, analysisResult.subcategory, deviationIndex);
         setRecommendedStyles(styles);
-        setStep('styles');
+        setIsDataReady(true);
     } catch (err) {
-        alert("分析過程發生錯誤");
+        alert("分析過程發生錯誤: " + err.message);
         setStep('input');
     }
   };
+
+  // Sync effect for deviationIndex changes on Styles step
+  const [isRefreshingStyles, setIsRefreshingStyles] = useState(false);
+
+  useEffect(() => {
+    if (step === 'styles' && category && inferredSubcategory) {
+        const refreshStyles = async () => {
+            setIsRefreshingStyles(true);
+            try {
+                const styles = await getRecommendedStylesAsync(category, inferredSubcategory, deviationIndex);
+                setRecommendedStyles(styles);
+            } catch (err) {
+                console.error("Refresh styles failed", err);
+            } finally {
+                setIsRefreshingStyles(false);
+            }
+        };
+        refreshStyles();
+    }
+  }, [deviationIndex, step, category, inferredSubcategory]);
 
   const handleSelectStyle = async (style) => {
     setIsFetchingDetails(true);
@@ -105,7 +127,10 @@ function App() {
           )}
 
           {step === 'analyzing' && (
-            <AnalyzingStep />
+            <AnalyzingStep 
+              isDataReady={isDataReady} 
+              onFinish={() => setStep('styles')} 
+            />
           )}
 
           {step === 'styles' && (
@@ -116,7 +141,7 @@ function App() {
               recommendedStyles={recommendedStyles}
               onSelectStyle={handleSelectStyle}
               onBack={() => setStep('input')}
-              isFetching={isFetchingDetails}
+              isFetching={isFetchingDetails || isRefreshingStyles}
             />
           )}
 

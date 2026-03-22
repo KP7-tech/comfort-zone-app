@@ -1,5 +1,5 @@
 .sidebar {
-    width: 300px;
+    width: 320px;
     display: flex;
     flex-direction: column;
     padding: 2rem;
@@ -10,7 +10,7 @@
     height: calc(100vh - 2rem);
     transition: all 0.3s ease;
     overflow-x: hidden;
-    min-width: 260px;
+    flex-shrink: 0;
 }
 
 .sidebar-header {
@@ -60,25 +60,41 @@
     overflow-wrap: break-word;
 }
 
-/* Vertical Slider Magic */
+/* Vertical Slider Area */
+.vertical-slider-wrapper {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0 40px;
+}
+
 .vertical-slider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 300px;
-    height: 8px;
+    appearance: slider-vertical;
+    -webkit-appearance: slider-vertical;
+    writing-mode: bt-lr; /* Firefox */
+    width: 8px;
+    height: 100%;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     outline: none;
-    transform: rotate(-90deg);
-    margin-top: 140px;
-    /* Adjust spacing to account for rotation */
-    margin-bottom: 140px;
-    position: relative;
-    /* Add custom progress track via gradient */
-    background-image: linear-gradient(90deg, var(--accent-cool), var(--accent-warm));
-    background-size: var(--val) 100%;
-    background-repeat: no-repeat;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+/* Fallback for browsers that don't support slider-vertical natively */
+@supports not (appearance: slider-vertical) {
+    .vertical-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 300px;
+        height: 8px;
+        transform: rotate(-90deg);
+        transform-origin: center;
+        margin: 0 -146px; /* Offset to center the rotated line */
+        background-image: linear-gradient(90deg, var(--accent-cool), var(--accent-warm));
+        background-size: var(--val) 100%;
+        background-repeat: no-repeat;
+    }
 }
 
 .vertical-slider::-webkit-slider-thumb {
@@ -103,13 +119,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 300px;
+    height: 100%;
     position: absolute;
-    right: 30px;
-    top: 150px;
+    right: 0;
+    top: 0;
     pointer-events: none;
     color: var(--text-muted);
     font-size: 0.8rem;
+    padding: 5px 0;
 }
 
 /* RWD for Sidebar */

@@ -23,9 +23,14 @@ async function callLLM(prompt) {
             if (res.ok) {
                 const data = await res.json();
                 return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                const msg = errData.error?.message || `Status ${res.status}`;
+                throw new Error(`Gemini Error: ${msg}`);
             }
         } catch (e) {
-            console.warn("Direct Gemini call failed, falling back...", e);
+            if (e.message.includes('Gemini Error')) throw e;
+            console.warn("Direct Gemini network failed, falling back...", e);
         }
     }
 
@@ -47,9 +52,14 @@ async function callLLM(prompt) {
             if (res.ok) {
                 const data = await res.json();
                 return data.choices?.[0]?.message?.content ?? '';
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                const msg = errData.error?.message || `Status ${res.status}`;
+                throw new Error(`OpenAI Error: ${msg}`);
             }
         } catch (e) {
-            console.warn("Direct OpenAI call failed, falling back...", e);
+            if (e.message.includes('OpenAI Error')) throw e;
+            console.warn("Direct OpenAI network failed, falling back...", e);
         }
     }
 
@@ -105,11 +115,23 @@ export async function analyzeInputItemsAsync(items) {
         return JSON.parse(jsonText);
     } catch (error) {
         console.error("LLM Error:", error);
+        
+        // If it's a known API error from direct calling, relay it
+        if (error.message.includes('Gemini Error') || error.message.includes('OpenAI Error')) {
+            return { error: `金鑰錯誤: ${error.message}` };
+        }
+
         if (error.message.includes('Failed to fetch')) {
             // Proxy not running — fall back to mock
             return new Promise(resolve => setTimeout(() => resolve(mockAnalyze(items)), 800));
         }
-        return { error: "AI 分析失敗，請確認是否已在平台（如 Vercel）設定 API 金鑰。" };
+
+        // Check for specific proxy errors
+        if (error.message.includes('No API keys configured on server')) {
+            return { error: "瀏覽器與伺服器皆未設定 API 金鑰。請點擊右上角 Settings (Key) 並輸入您的金鑰。" };
+        }
+
+        return { error: `分析失敗: ${error.message}` };
     }
 }
 

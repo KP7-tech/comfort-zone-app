@@ -2,23 +2,33 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from '../contexts/I18nContext';
 import './AnalyzingStep.css';
 
-export default function AnalyzingStep({ onComplete }) {
+export default function AnalyzingStep({ isDataReady, onFinish }) {
     const { t } = useTranslation();
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        // AI processing simulation (stalls at 95% until real data arrives)
         const interval = setInterval(() => {
             setProgress(p => {
-                if (p >= 95) {
-                    return 95;
+                if (isDataReady) {
+                    clearInterval(interval);
+                    return 100;
                 }
+                if (p >= 95) return 95;
                 return p + Math.floor(Math.random() * 15) + 5;
             });
         }, 400);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [isDataReady]);
+
+    useEffect(() => {
+        if (progress === 100) {
+            const timer = setTimeout(() => {
+                if (onFinish) onFinish();
+            }, 600); // Allow time for the bar to fill
+            return () => clearTimeout(timer);
+        }
+    }, [progress, onFinish]);
 
     return (
         <div className="analyzing-step fade-enter-active">

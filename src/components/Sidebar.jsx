@@ -26,24 +26,26 @@ export default function Sidebar({ deviationIndex, setDeviationIndex }) {
                 <div className="slider-value text-gradient">{deviationIndex}%</div>
                 <div className="slider-label">{getIndexLabel(deviationIndex)}</div>
 
-                <input
-                    type="range"
-                    min="1"
-                    max="100"
-                    step="1"
-                    value={deviationIndex}
-                    onChange={(e) => setDeviationIndex(parseInt(e.target.value))}
-                    className="vertical-slider"
-                    style={{ '--val': `${deviationIndex}%` }}
-                />
+                <div className="vertical-slider-wrapper">
+                    <input
+                        type="range"
+                        min="1"
+                        max="100"
+                        step="1"
+                        value={deviationIndex}
+                        onChange={(e) => setDeviationIndex(parseInt(e.target.value))}
+                        className="vertical-slider"
+                        style={{ '--val': `${deviationIndex}%` }}
+                    />
 
-                <div className="slider-markers">
-                    <span>100%</span>
-                    <span>80%</span>
-                    <span>60%</span>
-                    <span>40%</span>
-                    <span>20%</span>
-                    <span>0%</span>
+                    <div className="slider-markers">
+                        <span>100%</span>
+                        <span>80%</span>
+                        <span>60%</span>
+                        <span>40%</span>
+                        <span>20%</span>
+                        <span>0%</span>
+                    </div>
                 </div>
             </div>
         </aside>
