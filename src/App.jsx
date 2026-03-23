@@ -87,23 +87,21 @@ function App() {
     }
   };
 
-  // Sync effect for deviationIndex changes on Styles step
-  useEffect(() => {
-    if (step === 'styles' && category && inferredSubcategory) {
-        const refreshStyles = async () => {
-            setIsRefreshingStyles(true);
-            try {
-                const styles = await getRecommendedStylesAsync(category, inferredSubcategory, deviationIndex);
-                setRecommendedStyles(styles);
-            } catch (err) {
-                console.error("Refresh styles failed", err);
-            } finally {
-                setIsRefreshingStyles(false);
-            }
-        };
-        refreshStyles();
+  const handleRefreshStyles = async () => {
+    if ((step === 'styles' || step === 'details') && category && inferredSubcategory) {
+        setIsRefreshingStyles(true);
+        if (step === 'details') setStep('styles'); // Return to style selection if refreshing from details
+        try {
+            const styles = await getRecommendedStylesAsync(category, inferredSubcategory, deviationIndex);
+            setRecommendedStyles(styles);
+        } catch (err) {
+            console.error("Refresh styles failed", err);
+            alert("重新整理失敗，請稍後再試。");
+        } finally {
+            setIsRefreshingStyles(false);
+        }
     }
-  }, [deviationIndex, step, category, inferredSubcategory]);
+  };
 
   const handleSelectStyle = async (style) => {
     setIsFetchingDetails(true);
@@ -129,6 +127,9 @@ function App() {
         <Sidebar
           deviationIndex={deviationIndex}
           setDeviationIndex={setDeviationIndex}
+          onRefresh={handleRefreshStyles}
+          showRefresh={step === 'styles' || step === 'details'}
+          isRefreshing={isRefreshingStyles}
         />
 
         <main className="main-content">

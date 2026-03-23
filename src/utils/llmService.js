@@ -15,11 +15,13 @@ const OPENAI_MODELS = [
 ];
 
 // All LLM calls go through the local proxy server if direct calls fail.
+// All LLM calls go through providers sequentially if direct calls fail or quota is hit.
 async function callLLM(prompt) {
     const geminiKey = localStorage.getItem('gemini_api_key');
     const openaiKey = localStorage.getItem('openai_api_key');
+    const errors = [];
 
-    // 1. Try Gemini Tiers (Direct)
+    // 1. Try Gemini Tiers
     if (geminiKey) {
         for (const model of GEMINI_MODELS) {
             try {
@@ -37,22 +39,21 @@ async function callLLM(prompt) {
                 if (res.ok) {
                     const data = await res.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-                } else if (res.status === 429 || res.status === 401 || res.status === 404) {
-                    console.warn(`Gemini ${model} failed (Status ${res.status}), trying next fallback...`);
-                    continue; // Try next model or next provider
                 } else {
                     const errData = await res.json().catch(() => ({}));
                     const msg = errData.error?.message || `Status ${res.status}`;
-                    throw new Error(`Gemini Error: ${msg}`);
+                    console.warn(`Gemini ${model} failed: ${msg}. Trying next...`);
+                    errors.push(`Gemini ${model}: ${msg}`);
+                    if (res.status === 401 || res.status === 404) break; // Key error or model not found, skip provider
                 }
             } catch (e) {
-                if (e.message.includes('Gemini Error')) throw e;
-                console.warn(`Direct Gemini ${model} network failed, trying fallback...`, e);
+                console.warn(`Gemini ${model} network error.`, e);
+                errors.push(`Gemini ${model}: ${e.message}`);
             }
         }
     }
 
-    // 2. Try OpenAI Tiers (Direct)
+    // 2. Try OpenAI Tiers
     if (openaiKey) {
         for (const model of OPENAI_MODELS) {
             try {
@@ -71,36 +72,42 @@ async function callLLM(prompt) {
                 if (res.ok) {
                     const data = await res.json();
                     return data.choices?.[0]?.message?.content ?? '';
-                } else if (res.status === 429 || res.status === 401) {
-                    console.warn(`OpenAI ${model} failed (Status ${res.status}), trying next fallback...`);
-                    continue;
                 } else {
                     const errData = await res.json().catch(() => ({}));
                     const msg = errData.error?.message || `Status ${res.status}`;
-                    throw new Error(`OpenAI Error: ${msg}`);
+                    console.warn(`OpenAI ${model} failed: ${msg}. Trying next...`);
+                    errors.push(`OpenAI ${model}: ${msg}`);
+                    if (res.status === 401) break; // Key error, skip provider
                 }
             } catch (e) {
-                if (e.message.includes('OpenAI Error')) throw e;
-                console.warn(`Direct OpenAI ${model} network failed, trying fallback...`, e);
+                console.warn(`OpenAI ${model} network error.`, e);
+                errors.push(`OpenAI ${model}: ${e.message}`);
             }
         }
     }
 
-    // 3. Fallback to Proxy
-    const apiUrl = import.meta.env.VITE_API_URL || '';
-    const endpoint = `${apiUrl}/api/llm`;
-    
-    const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
-    });
-    if (!res.ok) {
-        const { error } = await res.json().catch(() => ({}));
-        throw new Error(error || `Proxy error ${res.status}`);
+    // 3. Last Resort: Proxy
+    try {
+        const apiUrl = import.meta.env.VITE_API_URL || '';
+        const endpoint = `${apiUrl}/api/llm`;
+        
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt }),
+        });
+        if (res.ok) {
+            const { text } = await res.json();
+            return text;
+        } else {
+            const { error } = await res.json().catch(() => ({}));
+            errors.push(`Proxy: ${error || res.status}`);
+        }
+    } catch (e) {
+        errors.push(`Proxy: ${e.message}`);
     }
-    const { text } = await res.json();
-    return text;
+
+    throw new Error(`All LLM models failed or quota exhausted. Errors: ${errors.join('; ')}`);
 }
 
 const isProxyAvailable = async () => {
@@ -245,10 +252,11 @@ Rules:
             `;
         } else {
             prompt = `
-            請為這個風格提供 5 個現實中絕對真實存在、知名或是最具代表性的具體作品或人物。
+            請為這個風格提供 5 個現實中絕對真實存在、知名(Well-known)或是較新(Recent/Current)、最具代表性的具體作品或人物。
             風格名稱：「${style.name}」
             風格描述：「${style.description}」
 
+            請優先挑選當前流行或在該領域中公認的經典作。
             請嚴格以 JSON 格式回傳，格式為:
             {
                 "items": [
