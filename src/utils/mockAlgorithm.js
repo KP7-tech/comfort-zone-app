@@ -3,10 +3,14 @@
 // 1. Parent Categories and Keywords for Detection
 const categoryKeywords = {
     '音樂 (Music)': ['聽', '音樂', '樂團', '五月天', '歌', 'spotify', '演唱會', '周杰倫', '伍佰', '蔡依林', '專輯', '單曲', 'music', 'pop', 'rock', 'jazz', 'band', 'song'],
-    '電影 (Movies)': ['電影', '看', '影集', '劇', '網飛', 'netflix', '戲院', 'marvel', '威秀', '國賓', '影城', 'movie', 'film', 'cinema', 'action', 'comedy', 'drama', 'horror'],
+    '電影 (Movies)': ['電影', '看', '戲院', 'marvel', '威秀', '國賓', '影城', 'movie', 'film', 'cinema', 'action', 'comedy', 'horror'],
+    '動畫 (Animation)': ['動畫', '動漫', 'anime', 'animation', '進擊的巨人', '鬼滅', '巴哈姆特', 'bilibili', 'cartoon', '宮崎駿'],
+    '連續劇 (TV Series)': ['影集', '連續劇', '台劇', '韓劇', '日劇', '美劇', 'netflix', 'disney+', 'hbomax', 'drama', 'series', '陸劇', '劇集'],
     '成人影音 (Adult Content)': ['p站', 'pornhub', 'av', '女優', 'onlyfans', 'swag', 'fc2', '無碼', 'adult', 'porn', 'nsfw', 'sex'],
     '餐飲美食 (Food)': ['麵', '飯', '吃', '餐廳', '美食', '牛排', '火鍋', '壽司', '拉麵', '夜市', 'food', 'restaurant', 'eat', 'meal', 'dinner', 'lunch'],
-    '書籍 (Books)': ['書', '小說', '閱讀', '漫畫', '誠品', '博客來', '圖書館', '書店', 'book', 'novel', 'read', 'comic', 'library']
+    '書籍 (Books)': ['書', '小說', '閱讀', '誠品', '博客來', '圖書館', '書店', 'book', 'novel', 'read', 'library'],
+    '漫畫 (Manga)': ['漫畫', 'comic', 'manga', 'webtoon', '少年jump', '漫迷', '單行本'],
+    '新媒體 (New Media)': ['youtube', 'twitch', 'vtuber', '直播', '頻道', '串流', 'instagram', 'tiktok', 'podcast', '油管', '博恩', '老高']
 };
 
 export function analyzeInputItems(items) {
@@ -321,6 +325,75 @@ const database = {
                 { name: '蟲姦 / 異種交配 CGI (Insects/Monsters)', description: '使用特效或真實無害昆蟲，挑戰人類本能噁心感的極端特攝。', url: 'https://www.google.com/search?q=Tentacle+Monster+AV' },
                 { name: 'Coprophilia / Scat (黃金傳說)', description: '挑戰排泄物與極度反胃感官的極限癖好 (請勿輕易嘗試搜尋)。', url: 'https://www.google.com/search?q=Scat+AV' },
                 { name: 'Deep Web Dark Archives (暗網流出模擬)', description: '刻意製作成極低畫質、充滿詭異儀式與精神污染的匿名上傳影片。', url: 'https://www.google.com/search?q=Creepy+Deep+Web+Porn' }
+            ]
+        }
+    ],
+
+    '動畫 (Animation)': [
+        {
+            id: 'ani_shonen', name: '熱血少年漫改 Shonen Anime', score: 0, description: '充滿熱血、戰鬥與友情的主流動畫。', icon: '🔥',
+            items: [
+                { name: '鬼滅之刃 (Demon Slayer)', description: '現象級熱血動畫，視覺效果頂尖。', url: 'https://www.youtube.com/results?search_query=鬼滅之刃' },
+                { name: '進擊的巨人 (Attack on Titan)', description: '史詩級劇情與深刻的世界觀探討。', url: 'https://www.youtube.com/results?search_query=進擊的巨人' },
+                { name: '咒術迴戰 (Jujutsu Kaisen)', description: '現代背景下的咒術與靈異戰鬥。', url: 'https://www.youtube.com/results?search_query=咒術迴戰' }
+            ]
+        },
+        {
+            id: 'ani_iyashi', name: '治癒系 / 日常 Iyashikei', score: 20, description: '溫暖人心、節奏平緩的放鬆之作。', icon: '🍃',
+            items: [
+                { name: '夏目友人帳', description: '人與妖怪之間溫馨而哀傷的故事。', url: 'https://www.youtube.com/results?search_query=夏目友人帳' },
+                { name: '搖曳露營△', description: '極致放鬆的戶外露營與友誼。', url: 'https://www.youtube.com/results?search_query=搖曳露營' }
+            ]
+        }
+    ],
+
+    '連續劇 (TV Series)': [
+        {
+            id: 'tv_kdrama', name: '韓劇 K-Drama', score: 0, description: '引領全球潮流的韓國影視作品。', icon: '🇰🇷',
+            items: [
+                { name: '魷魚遊戲 (Squid Game)', description: '探討人性的極限生存遊戲。', url: 'https://www.youtube.com/results?search_query=魷魚遊戲' },
+                { name: '黑暗榮耀 (The Glory)', description: '痛快淋漓的校園霸凌復仇劇。', url: 'https://www.youtube.com/results?search_query=黑暗榮耀' }
+            ]
+        },
+        {
+            id: 'tv_western', name: '美式影集 Western Series', score: 10, description: '高成本製作與多元題材的大型影集。', icon: '🇺🇸',
+            items: [
+                { name: '怪奇物語 (Stranger Things)', description: '80年代復古情懷與超自然冒險。', url: 'https://www.youtube.com/results?search_query=怪奇物語' },
+                { name: '權力的遊戲 (Game of Thrones)', description: '史詩壯闊的奇幻權力爭霸。', url: 'https://www.youtube.com/results?search_query=權力的遊戲' }
+            ]
+        }
+    ],
+
+    '漫畫 (Manga)': [
+        {
+            id: 'man_popular', name: '少年漫畫 Popular Shonen', score: 0, description: '最受歡迎的雜誌連載漫畫作品。', icon: '📖',
+            items: [
+                { name: 'ONE PIECE 海賊王', description: '追尋夢想與自由的偉大航道冒險。', url: 'https://www.google.com/search?q=ONE+PIECE+Manga' },
+                { name: '獵人 Hunter x Hunter', description: '極具層次的戰略與念能力對戰。', url: 'https://www.google.com/search?q=Hunter+x+Hunter+Manga' }
+            ]
+        },
+        {
+            id: 'man_webtoon', name: '條漫 / Webtoon', score: 20, description: '適配手機閱讀的彩色縱向漫畫。', icon: '📱',
+            items: [
+                { name: '女神降臨', description: '關於美醜與自我認同的戀愛故事。', url: 'https://www.google.com/search?q=女神降臨+Webtoon' },
+                { name: '看臉時代', description: '校園霸凌與雙重人格的現實刻畫。', url: 'https://www.google.com/search?q=看臉時代+Webtoon' }
+            ]
+        }
+    ],
+
+    '新媒體 (New Media)': [
+        {
+            id: 'nm_vlog', name: '知識型 YouTube / VLOG', score: 0, description: '分享創意與知識的影音創作者。', icon: '📹',
+            items: [
+                { name: '老高與小茉 Mr & Mrs Gao', description: '有趣的世界未解之謎與科普。', url: 'https://www.youtube.com/@kuaishoutv' },
+                { name: '志祺七七', description: '深度解析時事與社會議題。', url: 'https://www.youtube.com/@shidi77' }
+            ]
+        },
+        {
+            id: 'nm_game', name: '遊戲實況 / Twitch', score: 15, description: '即時互動的遊戲直播與社群文化。', icon: '🎮',
+            items: [
+                { name: '餐餐自由配 (魯蛋)', description: '資深實況主，獨特的遊戲見解與幽默。', url: 'https://www.twitch.tv/blusewilly_tw' },
+                { name: 'Kai Cenat', description: '全球最熱門的創意生活實況主。', url: 'https://www.twitch.tv/kaicenat' }
             ]
         }
     ]

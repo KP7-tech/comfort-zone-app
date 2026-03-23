@@ -118,9 +118,10 @@ export async function analyzeInputItemsAsync(items) {
     try {
         const prompt = `
             你需要分析使用者提供的近期活動項目: [${items.join(', ')}]
-            1. 這些項目是否明顯屬於同一個大類？大類必須是：音樂 (Music), 電影 (Movies), 成人影音 (Adult Content), 餐飲美食 (Food), 書籍 (Books) 之一。
+            1. 這些項目是否明顯屬於同一個大類？大類必須是：音樂 (Music), 電影 (Movies), 動畫 (Animation), 連續劇 (TV Series), 成人影音 (Adult Content), 餐飲美食 (Food), 書籍 (Books), 漫畫 (Manga) 之一。
             2. 如果這些項目混雜了多個不同大類，請回傳 error 字串說明"請提供同一個大類的項目以利分析"。
             3. 如果確定是同一個大類，請推斷出最符合這 ${items.length} 個項目的"具體子風格" (subcategory)。
+            4. 如果輸入項目不在上述大類範圍內，請自動搜尋並回傳一個最符合的分類名稱 (如：輸入 YouTube 頻道、Twitch 實況主時，請分類為「新媒體 (New Media)」)，包含但不限制在目前設定的類別。
 
             [Semantic Isolation Rule]
             - "Adult Content" and "Movies" (mainstream cinema) are STRICTLY SEPARATE categories.
@@ -130,8 +131,8 @@ export async function analyzeInputItemsAsync(items) {
             請嚴格以 JSON 格式回傳，格式為:
             {
                 "error": "如果有錯誤訊息放這裡，否則留空字串",
-                "category": "配對到的大類名稱，需與上述五項完全一致",
-                "subcategory": "具體的風格名稱，如: 獨立搖滾、科幻驚悚片、巨乳系女優AV"
+                "category": "配對到的大類名稱，需與上述八項完全一致，或自動推斷的新類別名稱",
+                "subcategory": "具體的風格名稱，如: 獨立搖滾、科幻驚悚片、熱血少年漫、VTuber 實況"
             }
         `;
         const jsonText = await callLLM(prompt);
