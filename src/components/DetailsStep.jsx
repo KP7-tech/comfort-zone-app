@@ -44,6 +44,16 @@ export default function DetailsStep({ category, style, deviationIndex, specificI
         const lowerUrl = url.toLowerCase();
         if (lowerUrl.includes('youtube')) return 'YouTube';
         if (lowerUrl.includes('spotify')) return 'Spotify';
+        if (lowerUrl.includes('apple.com')) return 'Apple Music';
+        if (lowerUrl.includes('netflix')) return 'Netflix';
+        if (lowerUrl.includes('disneyplus') || lowerUrl.includes('disney+')) return 'Disney+';
+        if (lowerUrl.includes('twitch')) return 'Twitch';
+        if (lowerUrl.includes('instagram')) return 'Instagram';
+        if (lowerUrl.includes('tiktok')) return 'TikTok';
+        if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) return 'X';
+        if (lowerUrl.includes('behance')) return 'Behance';
+        if (lowerUrl.includes('adobeportfolio')) return 'Portfolio';
+        if (lowerUrl.includes('github')) return 'GitHub';
         if (lowerUrl.includes('google')) return 'Google';
         if (lowerUrl.includes('dmm.co.jp')) return 'DMM/FANZA';
         if (lowerUrl.includes('r18.com')) return 'R18';
@@ -52,7 +62,7 @@ export default function DetailsStep({ category, style, deviationIndex, specificI
         if (lowerUrl.includes('s1s1s1')) return 'S1';
         if (lowerUrl.includes('faleno')) return 'FALENO';
         if (lowerUrl.includes('kink')) return 'Kink.com';
-        return 'Website';
+        return 'Link';
     };
 
     return (

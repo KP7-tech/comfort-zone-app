@@ -408,7 +408,7 @@ function generateFallbackStyles(category, deviationIndex) {
         score: s,
         description: `基於 ${category}，跳脫舒適圈 ${s}% 的未知領域。`,
         icon: '🌌',
-        items: Array.from({ length: 5 }).map((_, i) => ({
+        items: Array.from({ length: 8 }).map((_, i) => ({
             name: `未知道具 ${s}-${i+1}`,
             description: `演算法為你尋找的 ${category} 具體事項。`,
             url: `https://www.google.com/search?q=${encodeURIComponent(category)}+${s}+${i+1}`
@@ -453,7 +453,7 @@ export function getSpecificItemsForStyle(style, fullRecommendedArray = []) {
     // Since we attached `_rawItems` in getRecommendedStyles, we can just return it.
     // Ensure we always return exactly 5, if a list is shorter, slice or fallback.
     if (style && style._rawItems) {
-        return style._rawItems.slice(0, 5);
+        return style._rawItems.slice(0, 10);
     }
 
     // Extreme fallback

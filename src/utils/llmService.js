@@ -252,20 +252,28 @@ Rules:
             `;
         } else {
             prompt = `
-            請為這個風格提供 5 個現實中絕對真實存在、知名(Well-known)或是較新(Recent/Current)、最具代表性的具體作品或人物。
+            請為這個風格提供 6-10 個現實中絕對真實存在的具體作品、人物或帳號。
             風格名稱：「${style.name}」
             風格描述：「${style.description}」
 
-            請優先挑選當前流行或在該領域中公認的經典作。
+            [篩選優先權]
+            1. 數量建議：共回傳 6-10 項。
+            2. 代表性分配：其中「極具代表性的經典(Well-known)」最多不超過 3 項，其餘應優先挑選「近期的 (Recent)」、「當前流行的 (Current/Trending)」或「具潛力的」事項。
+            3. 真實性：必須是現實中存在的，嚴禁虛構。
+
+            [URL 格式與平台]
+            - 合法外部連結，可包含但不限於：YouTube, Spotify, Apple Music, Netflix, Disney+, Twitch, Instagram, TikTok, Twitter/X, Behance, Adobe Portfolio, GitHub 等。
+            - 格式：https://www.youtube.com/results?search_query=名稱 或 直接對應平台的搜尋網址/個人檔案網址。
+
             請嚴格以 JSON 格式回傳，格式為:
             {
                 "items": [
                     {
-                        "name": "真實的作品名稱、樂團名或電影名",
-                        "description": "15字以內的推薦理由",
-                        "url": "合法外部網址，如 https://www.youtube.com/results?search_query=名稱"
+                        "name": "真實的作品名稱、人物、帳號或 ID",
+                        "description": "15字以內的推薦理由 (強調為什麼符合近期的趨勢或必看理由)",
+                        "url": "外部網址"
                     }
-                ] // 必須剛好 5 個
+                ]
             }
             `;
         }
