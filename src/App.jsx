@@ -182,7 +182,6 @@ function App() {
               <DetailsStep
                 category={category}
                 style={selectedStyle}
-                deviationIndex={deviationIndex}
                 specificItems={specificItems}
                 onBack={() => setStep('styles')}
               />

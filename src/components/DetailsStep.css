@@ -74,58 +74,75 @@
     opacity: 1;
 }
 
-.item-content {
-    flex: 1;
-    z-index: 1;
+.item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
 }
 
 .item-name {
     font-size: 1.3rem;
     color: var(--text-main);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
     font-weight: 600;
+    line-height: 1.2;
+}
+
+.copy-btn-icon {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.copy-btn-icon:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-main);
+    transform: translateY(-1px);
+}
+
+.copy-btn-icon.copied {
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.1);
 }
 
 .item-desc {
     color: var(--text-muted);
     font-size: 0.95rem;
-    line-height: 1.4;
-    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex: 1;
 }
 
-.platform-tag {
-    display: inline-block;
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+.action-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 2;
+    position: relative;
+    margin-top: auto;
 }
 
-.platform-tag.youtube {
-    background: rgba(255, 0, 0, 0.2);
-    color: #ff4444;
-    border: 1px solid rgba(255, 0, 0, 0.4);
-}
-
-.platform-tag.twitch {
-    background: rgba(145, 70, 255, 0.2);
-    color: #c093ff;
-    border: 1px solid rgba(145, 70, 255, 0.4);
-}
-
-.platform-tag.onlyfans,
-.platform-tag.adult {
-    background: rgba(0, 175, 240, 0.2);
-    color: #00aff0;
-    border: 1px solid rgba(0, 175, 240, 0.4);
-}
-
-.platform-tag.pornhub {
-    background: rgba(255, 153, 0, 0.2);
-    color: #ffa31a;
-    border: 1px solid rgba(255, 153, 0, 0.4);
+.link-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    white-space: nowrap;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
 }
 
 @media (max-width: 768px) {
@@ -142,50 +159,28 @@
     }
 
     .action-group {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 }
 
 .action-arrow {
-    font-size: 1.5rem;
-    color: var(--text-muted);
-    transition: all 0.3s ease;
-    z-index: 1;
-}
-
-.detail-item-card:hover .action-arrow {
-    color: var(--accent-warm);
-    transform: translate(3px, -3px);
-}
-
-.action-group {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    z-index: 2;
-    position: relative;
-}
-
-.action-group .copy-btn,
-.action-group .link-btn {
-    font-size: 0.78rem;
-    padding: 0.3rem 0.75rem;
-    white-space: nowrap;
-    text-decoration: none;
-    text-align: center;
-    flex: 1;
+    display: none; /* Removed in favor of header copy and bottom links */
 }
 
 /* R-Class: ID-only compact row */
 .detail-item-card--rclass {
     flex-direction: row;
     align-items: center;
-    padding: 0.7rem 1.2rem;
+    padding: 0.8rem 1.2rem;
     gap: 1rem;
 }
 
-.detail-item-card--rclass::after {
-    display: none;
+.detail-item-card--rclass .item-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .item-name--id {
